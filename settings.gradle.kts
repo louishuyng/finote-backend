@@ -1,1 +1,1 @@
-rootProject.name = "com.example.finote-backend"
+rootProject.name = "com.finote.backend"
