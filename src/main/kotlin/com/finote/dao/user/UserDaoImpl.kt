@@ -27,3 +27,5 @@ class UserDaoImpl : UserDaoFacade {
     Users.select { Users.username eq username }.map(::resultRowToNode).singleOrNull()
   }
 }
+
+val userDAO = UserDaoImpl()
