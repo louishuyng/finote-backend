@@ -11,8 +11,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
-import java.lang.Exception
-import java.sql.SQLIntegrityConstraintViolationException
 
 @Serializable data class LoginParams(val username: String, val password: String)
 
@@ -20,7 +18,6 @@ fun Route.authRouting() {
   post("/login") {
     val payloadUser = call.receive<LoginParams>()
     val user = userService.loginUser(payloadUser.username, payloadUser.password)
-
     if (user != null) {
       val token = jwtService.create(user.username)
       val response = mapOf("token" to token, "user" to UserSerializer.toUserResource(user))
@@ -34,11 +31,7 @@ fun Route.authRouting() {
   post("/signup") {
     val user = call.receive<User>()
 
-    try {
-      userService.createUser(user)
-      call.respond(HttpStatusCode.Created, "User signed up")
-    } catch (err: Exception)  {
-      call.respond(HttpStatusCode.BadRequest, "Can not create this user")
-    }
+    userService.createUser(user)
+    call.respond(HttpStatusCode.Created, "User signed up")
   }
 }

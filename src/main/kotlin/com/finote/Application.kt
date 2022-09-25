@@ -13,6 +13,7 @@ fun main() {
         configureHTTP()
         configureSecurity()
         configureRouting()
+        configureException()
       }
       .start(wait = true)
 }

@@ -7,8 +7,11 @@ import io.ktor.server.plugins.*
 
 class UserService {
   suspend fun createUser(user: User): User? {
+    checkExistUser(user.username)
+
     val hashedPassword = Hasher.hashPassword(user.password)
     val newUser = User(username = user.username, email = user.email, password = hashedPassword)
+
     return userDAO.createUser(newUser)
   }
 
@@ -17,9 +20,17 @@ class UserService {
     if (user != null) {
       if (Hasher.checkPassword(password, user)) return user
       else {
-        return null
+        throw AssertionError("Wrong Password")
       }
-    } else return null
+    } else throw NotFoundException("user not found")
+  }
+
+  private suspend fun checkExistUser(username: String) {
+    val existUser = userDAO.findByUsername(username)
+
+    if (existUser != null) {
+      throw AssertionError("This user has been created before")
+    }
   }
 }
 
