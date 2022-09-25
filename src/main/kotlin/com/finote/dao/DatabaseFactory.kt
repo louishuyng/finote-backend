@@ -1,5 +1,6 @@
 package com.finote.dao
 
+import com.finote.models.*
 import com.finote.plugins.Env
 import kotlinx.coroutines.*
 import org.jetbrains.exposed.sql.*
@@ -21,7 +22,7 @@ object DatabaseFactory {
             user = dbUser,
             password = dbPassword,
         )
-    transaction(database) {}
+    transaction(database) { SchemaUtils.create(Users) }
   }
 
   suspend fun <T> dbQuery(block: suspend () -> T): T =
