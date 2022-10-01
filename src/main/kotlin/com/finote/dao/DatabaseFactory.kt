@@ -22,7 +22,12 @@ object DatabaseFactory {
             user = dbUser,
             password = dbPassword,
         )
-    transaction(database) { SchemaUtils.create(Users) }
+    transaction(database) {
+      SchemaUtils.create(Users)
+      SchemaUtils.create(Categories)
+      SchemaUtils.create(Incomes)
+      SchemaUtils.create(Expenses)
+    }
   }
 
   suspend fun <T> dbQuery(block: suspend () -> T): T =

@@ -20,11 +20,17 @@ class UserDaoImpl : UserDaoFacade {
           it[Users.email] = user.email
           it[Users.password] = user.password
         }
+
     insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToNode)
   }
 
   override suspend fun findByUsername(username: String): User? = dbQuery {
+    println(username)
     Users.select { Users.username eq username }.map(::resultRowToNode).singleOrNull()
+  }
+
+  override suspend fun findByEmail(email: String): User? = dbQuery {
+    Users.select { Users.email eq email }.map(::resultRowToNode).singleOrNull()
   }
 }
 
